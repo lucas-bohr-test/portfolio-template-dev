@@ -1,0 +1,37 @@
+
+name: bohr.io deploy
+on: push
+permissions: write-all
+jobs:
+  deploy:
+    name: Deploy on bohr.io
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: main
+
+      - uses: actions/checkout@v3
+        with:
+          path: template
+          repository: 'bohr-io/portfolio-template-dev'
+
+      - name: Copy template
+        run: |
+          cd template
+          ls -la
+          cd ..
+
+          rm -rf template/.git
+          
+          cd template
+          ls -la
+          cd ..
+
+          cp -r template/. main
+          cd main
+          git config --global user.email "hello@bohr.io"
+          git config --global user.name "bohr.io"
+          git add .
+          git commit -m "Initial template commit"
+          git push
